@@ -1,0 +1,33 @@
+Lens HRV es una app de Android que mide la <b>variabilidad de la frecuencia cardiaca</b> (HRV): cuánto cambia el tiempo entre un latido y el siguiente, medido en milisegundos. Usa fotopletismografía (PPG), una técnica óptica simple que detecta cambios mínimos de flujo sanguíneo en la yema del dedo con la cámara y el flash del teléfono. No es invasiva y no necesita sensores extra.
+
+<b>Por qué importa el HRV</b>
+
+La variabilidad de la frecuencia cardiaca es más que una medición del corazón. Los pequeños cambios entre latidos vienen de muchos procesos que ocurren al mismo tiempo. El corazón no trabaja solo. Está en constante interacción con el resto del cuerpo: el sistema nervioso, los pulmones, las hormonas, la temperatura, el sistema inmune, la digestión, los ciclos circadianos, las emociones y más. El HRV funciona como un microscopio para observar esa red de órganos y sistemas.
+
+<b>Qué hace diferente a Lens HRV</b>
+
+La mayoría de las apps de HRV hoy funcionan como cajas cerradas. Suelen ser de pago, piden sensores caros y solo te muestran los números que ellas deciden calcular. Casi nunca tienes acceso a la señal cruda. Muchas también simplifican de más el estado del cuerpo en un solo score o color.
+
+Lens HRV es completamente código abierto. Cada algoritmo viene de investigación pública y revisada por pares. El enfoque es procesamiento digital de señales clásico, no inteligencia artificial pesada. Así la app se mantiene ligera, comprensible y usable en muchos dispositivos.
+
+Todos los datos se procesan en tu teléfono: no se envía nada a la nube. Conservas privacidad y control.
+
+La app no ofrece scores de “readiness”. Ese tipo de métrica se considera demasiado compleja y a menudo simplificada. Lens HRV se centra en mediciones claras y simples. El objetivo es una herramienta sin fricción, accesible para cualquiera.
+
+<b>Cómo funciona</b>
+
+Coloca el índice sobre el lente de la cámara hasta que la vista previa se ponga rojo profundo. Una calibración corta inicia la grabación. Mantén el dedo quieto. Al terminar, la señal completa se procesa sin conexión. El preset está pensado para condiciones normales de interiores.
+
+<b>Qué obtienes</b>
+
+Dominio del tiempo: <b>Heart Rate</b>, <b>RMSSD</b>, <b>SDNN</b> y <b>Stress Index</b>.
+
+Dominio de la frecuencia: <b>Total Power</b>, <b>LF</b>, <b>HF</b>, <b>LF/HF</b>, <b>LF Peak</b>, <b>respiration rate</b> y <b>Coherence Score</b>.
+
+Cada sesión también muestra <b>artifacts</b> y <b>coverage</b>. Menos de 5% es excelente, menos de 15% es bueno, y 15% o más queda invalidada.
+
+Cada sesión se compara con un <b>baseline</b> de 7 días. En Ajustes puedes exportar tus datos como CSV.
+
+<b>Aviso</b>
+
+Lens HRV es una herramienta técnica para seguimiento y análisis de datos personales. No es un dispositivo médico y no ofrece consejo, diagnóstico ni tratamiento. Para decisiones de salud, consulta siempre a un profesional calificado.
