@@ -1,0 +1,10 @@
+First public release.
+
+<ul>
+<li><b>Camera PPG</b> — measure HRV with a fingertip on the lens</li>
+<li><b>Time domain</b> — Heart Rate, RMSSD, SDNN, Stress Index</li>
+<li><b>Frequency domain</b> — Total Power, LF, HF, LF/HF, LF Peak, respiration rate, Coherence Score</li>
+<li>Signal quality and a 7-day baseline. On-device only. CSV export from Settings</li>
+</ul>
+
+Not a medical device.

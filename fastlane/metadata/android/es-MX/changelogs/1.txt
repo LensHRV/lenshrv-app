@@ -1,0 +1,10 @@
+Primer lanzamiento público.
+
+<ul>
+<li><b>PPG con cámara</b> — mide HRV con la yema del dedo sobre el lente</li>
+<li><b>Dominio del tiempo</b> — Heart Rate, RMSSD, SDNN, Stress Index</li>
+<li><b>Dominio de la frecuencia</b> — Total Power, LF, HF, LF/HF, LF Peak, respiration rate, Coherence Score</li>
+<li>Calidad de señal y baseline de 7 días. Todo en el dispositivo. Exportar CSV en Ajustes</li>
+</ul>
+
+No es un dispositivo médico.
