@@ -119,4 +119,5 @@ dependencies {
     "samsungImplementation"(libs.androidx.work.runtime.ktx)
     "samsungImplementation"(libs.androidx.hilt.work)
     "samsungImplementation"(libs.samsung.iap)
+    "samsungImplementation"(libs.konfetti.compose)
 }

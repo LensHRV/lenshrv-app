@@ -5,6 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -27,6 +28,8 @@ class AppPreferencesRepository @Inject constructor(
         private val TELEMETRY_ENABLED_KEY = booleanPreferencesKey("telemetry_enabled")
         private val ANONYMOUS_USER_ID = stringPreferencesKey("anonymous_user_id")
         private val PREP_ENABLED_KEY = booleanPreferencesKey("measurement_prep_enabled")
+        private val MEASUREMENT_COUNT_KEY = intPreferencesKey("measurement_count")
+        private val NEXT_PROMPT_COUNT_KEY = intPreferencesKey("next_prompt_count")
     }
 
     suspend fun hasAcceptedTerms(): Boolean {
@@ -85,6 +88,27 @@ class AppPreferencesRepository @Inject constructor(
 
     suspend fun saveMeasurementPrepEnabled(enabled: Boolean) {
         context.dataStore.edit { it[PREP_ENABLED_KEY] = enabled }
+    }
+
+    val measurementCount: Flow<Int> = context.dataStore.data.map {
+        it[MEASUREMENT_COUNT_KEY] ?: 0
+    }
+
+    val nextPromptCount: Flow<Int> = context.dataStore.data.map {
+        it[NEXT_PROMPT_COUNT_KEY] ?: 5
+    }
+
+    suspend fun incrementMeasurementCount() {
+        context.dataStore.edit { preferences ->
+            val current = preferences[MEASUREMENT_COUNT_KEY] ?: 0
+            preferences[MEASUREMENT_COUNT_KEY] = current + 1
+        }
+    }
+
+    suspend fun setNextPromptCount(count: Int) {
+        context.dataStore.edit { preferences ->
+            preferences[NEXT_PROMPT_COUNT_KEY] = count
+        }
     }
 
 }

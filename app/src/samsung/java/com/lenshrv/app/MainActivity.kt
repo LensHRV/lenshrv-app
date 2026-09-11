@@ -22,14 +22,17 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
+import com.lenshrv.app.data.billing.SamsungIapManager
 import com.lenshrv.app.data.repository.AppPreferencesRepository
 import com.lenshrv.app.data.worker.TelemetryScheduler
+import com.lenshrv.app.ui.components.StartupTipThanksHost
 import com.lenshrv.app.ui.navigation.AppNavigation
 import com.lenshrv.app.ui.screens.splash.NavigationStates
 import com.lenshrv.app.ui.screens.splash.SplashViewModel
@@ -48,9 +51,13 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var telemetryScheduler: TelemetryScheduler
 
+    @Inject
+    lateinit var samsungIapManager: SamsungIapManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
+        samsungIapManager.initialize()
         lifecycleScope.launch {
             if (appPreferencesRepository.isTelemetryEnabled()) {
                 telemetryScheduler.schedule()
@@ -66,7 +73,10 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background,
                 ) {
-                    AppNavigation()
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        AppNavigation()
+                        StartupTipThanksHost(iapManager = samsungIapManager)
+                    }
                 }
             }
         }
