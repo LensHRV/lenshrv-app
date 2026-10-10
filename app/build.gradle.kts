@@ -113,6 +113,7 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.datastore.preferences)
     ksp(libs.androidx.hilt.compiler)
+    testImplementation(libs.junit)
     "samsungImplementation"(platform(libs.supabase.bom))
     "samsungImplementation"(libs.supabase.postgrest)
     "samsungImplementation"(libs.ktor.client.android)
