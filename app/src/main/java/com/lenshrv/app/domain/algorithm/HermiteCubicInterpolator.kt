@@ -94,7 +94,7 @@ object HermiteCubicInterpolator {
         return w[w.size / 2]
     }
 
-    private fun slope(rr: List<Long>, j: Int): Double {
+    fun slope(rr: List<Long>, j: Int): Double {
         val n = rr.size
         return when {
             n < 2 -> 0.0
@@ -104,7 +104,7 @@ object HermiteCubicInterpolator {
         }
     }
 
-    private fun hermite(t: Double, p0: Double, m0: Double, p1: Double, m1: Double): Double {
+    fun hermite(t: Double, p0: Double, m0: Double, p1: Double, m1: Double): Double {
         val t2 = t * t
         val t3 = t2 * t
         val h00 = 2 * t3 - 3 * t2 + 1
