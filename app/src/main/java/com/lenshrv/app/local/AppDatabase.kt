@@ -12,7 +12,7 @@ import com.lenshrv.app.local.entities.HrvMetricsEntity
         HrvMetricsEntity::class,
         ChannelValuesEntity::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = true
 )
 abstract class AppDatabase : RoomDatabase() {

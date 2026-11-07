@@ -176,5 +176,14 @@ class CameraManagerMeasurement @Inject constructor(
         interopControl?.setCaptureRequestOptions(lockOptions)
     }
 
-    fun shutdown() = cameraExecutor.shutdown()
+    fun shutdown() {
+        cameraControl?.enableTorch(false)
+        imageAnalysis?.clearAnalyzer()
+        cameraProvider?.unbindAll()
+        cameraControl = null
+        interopControl = null
+        imageAnalysis = null
+        cameraProvider = null
+        cameraExecutor.shutdown()
+    }
 }

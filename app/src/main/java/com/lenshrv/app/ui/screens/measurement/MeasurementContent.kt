@@ -27,11 +27,18 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -49,21 +56,37 @@ import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import kotlinx.coroutines.delay
+import com.lenshrv.app.domain.model.MAX_MEASUREMENT_TAG_LENGTH
 import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun MeasurementContent(
     state: MeasurementUiState,
     onNavigateBack: () -> Unit,
+    onTagChange: (String) -> Unit,
+    onViewResults: () -> Unit,
 ) {
     val phase = state.phase
+    if (phase is MeasurementPhase.Finished) {
+        MeasurementFinishedContent(
+            tag = state.tag,
+            onTagChange = onTagChange,
+            onViewResults = onViewResults,
+            onNavigateBack = onNavigateBack,
+        )
+        return
+    }
+
     val isCalibrating = phase is MeasurementPhase.Calibrating
     val isMeasuring = phase is MeasurementPhase.Measuring
     val measuringId = (phase as? MeasurementPhase.Measuring)?.measurementId
@@ -303,6 +326,127 @@ fun MeasurementContent(
                         .padding(bottom = 100.dp)
                         .background(Color.Red)
                         .padding(horizontal = 20.dp, vertical = 10.dp),
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun MeasurementFinishedContent(
+    tag: String,
+    onTagChange: (String) -> Unit,
+    onViewResults: () -> Unit,
+    onNavigateBack: () -> Unit,
+) {
+    val focusManager = LocalFocusManager.current
+
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .statusBarsPadding()
+                .navigationBarsPadding(),
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(70.dp)
+                    .padding(top = 24.dp, bottom = 24.dp, start = 16.dp, end = 16.dp),
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "Back",
+                    tint = MaterialTheme.colorScheme.onBackground,
+                    modifier = Modifier
+                        .align(Alignment.CenterStart)
+                        .size(26.dp)
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null,
+                            onClick = onNavigateBack,
+                        ),
+                )
+                Text(
+                    text = "COMPLETE",
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight.ExtraBold,
+                    letterSpacing = 2.sp,
+                    modifier = Modifier.align(Alignment.Center),
+                )
+            }
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .padding(horizontal = 24.dp, vertical = 32.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+            ) {
+                Icon(
+                    imageVector = Icons.Default.CheckCircle,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(56.dp),
+                )
+                Spacer(modifier = Modifier.height(20.dp))
+                Text(
+                    text = "Measurement complete",
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    textAlign = TextAlign.Center,
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+                Text(
+                    text = "Add an optional tag before viewing your results.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center,
+                )
+                Spacer(modifier = Modifier.height(32.dp))
+                OutlinedTextField(
+                    value = tag,
+                    onValueChange = onTagChange,
+                    modifier = Modifier.fillMaxWidth(),
+                    label = { Text("Tag (optional)") },
+                    supportingText = {
+                        Text(
+                            text = "${tag.length}/$MAX_MEASUREMENT_TAG_LENGTH",
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.End,
+                        )
+                    },
+                    minLines = 2,
+                    maxLines = 3,
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.Sentences,
+                        imeAction = ImeAction.Done,
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = { focusManager.clearFocus() },
+                    ),
+                )
+            }
+
+            Button(
+                onClick = onViewResults,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp, vertical = 16.dp)
+                    .height(52.dp),
+                shape = RoundedCornerShape(8.dp),
+            ) {
+                Text("VIEW RESULTS", fontWeight = FontWeight.Bold)
+                Spacer(modifier = Modifier.size(8.dp))
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                    contentDescription = null,
                 )
             }
         }

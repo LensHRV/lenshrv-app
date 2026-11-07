@@ -8,6 +8,7 @@ import com.lenshrv.app.data.repository.AppPreferencesRepository
 import com.lenshrv.app.data.worker.TelemetryScheduler
 import com.lenshrv.app.domain.model.BaselineResult
 import com.lenshrv.app.domain.model.HrvMetrics
+import com.lenshrv.app.domain.model.normalizeMeasurementTag
 import com.lenshrv.app.domain.repository.HrvMetricsRepository
 import com.lenshrv.app.domain.usecase.GetBaselineUseCase
 import com.lenshrv.app.domain.usecase.SaveMeasurementUseCase
@@ -45,6 +46,7 @@ class ResultsViewModel @Inject constructor(
     private val appPreferencesRepository: AppPreferencesRepository,
 ) : ViewModel() {
     private val resultId: String = checkNotNull(savedStateHandle["resultId"])
+    private val tag: String = savedStateHandle.get<String>("tag").orEmpty()
     private val _uiState = MutableStateFlow<ResultsUiState>(ResultsUiState.Loading)
     val uiState = _uiState.asStateFlow()
 
@@ -63,6 +65,7 @@ class ResultsViewModel @Inject constructor(
                             timestamp = System.currentTimeMillis(),
                             durationSeconds = 120,
                             cameraMetadata = metadata ?: "none",
+                            tag = tag,
                         )
                         if (computed != null) {
                             saveMeasurementUseCase(computed, rawData)
@@ -102,6 +105,19 @@ class ResultsViewModel @Inject constructor(
         viewModelScope.launch {
             repository.delete(resultId)
             _uiState.value = ResultsUiState.Deleted
+        }
+    }
+
+    fun updateTag(tag: String) {
+        val normalized = normalizeMeasurementTag(tag)
+        val current = _uiState.value as? ResultsUiState.Success ?: return
+        _uiState.value = current.copy(metrics = current.metrics.copy(tag = normalized))
+        viewModelScope.launch {
+            try {
+                repository.updateTag(resultId, normalized)
+            } catch (e: Exception) {
+                _uiState.value = current
+            }
         }
     }
 }

@@ -12,6 +12,7 @@ import com.lenshrv.app.data.camera.MeasurementCache
 import com.lenshrv.app.domain.algorithm.CalibrationManager
 import com.lenshrv.app.domain.algorithm.LiveRrDetector
 import com.lenshrv.app.domain.algorithm.SessionManager
+import com.lenshrv.app.domain.model.MAX_MEASUREMENT_TAG_LENGTH
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -45,6 +46,7 @@ data class MeasurementUiState(
     val liveRrMs: Long? = null,
     val liveBpm: Int? = null,
     val fingerAlert: Boolean = false,
+    val tag: String = "",
 )
 
 
@@ -144,6 +146,10 @@ class MeasurementViewModel @Inject constructor(
         cameraManager.setFlash(enabled)
     }
 
+    fun updateTag(tag: String) {
+        _uiState.update { it.copy(tag = tag.take(MAX_MEASUREMENT_TAG_LENGTH)) }
+    }
+
 
     private fun startTracking() {
         val newId = UUID.randomUUID().toString()
@@ -172,6 +178,7 @@ class MeasurementViewModel @Inject constructor(
 
 
     private fun finalizeMeasurement() {
+        cameraManager.shutdown()
         calibrationManager.reset()
         _uiState.update {
             it.copy(

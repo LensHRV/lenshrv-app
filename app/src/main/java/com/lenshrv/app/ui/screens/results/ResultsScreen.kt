@@ -100,6 +100,7 @@ fun ResultsScreen(
             SuccessContent(
                 state = state,
                 onDeleteResult = { viewModel.deleteResult() },
+                onUpdateTag = viewModel::updateTag,
                 onNavigateBack = onNavigateBack,
             )
         }
@@ -115,6 +116,7 @@ private fun SuccessContent(
     state: ResultsUiState.Success,
     onNavigateBack: () -> Unit,
     onDeleteResult: () -> Unit,
+    onUpdateTag: (String) -> Unit,
 ) {
     var showCoherenceInfo by remember { mutableStateOf(false) }
     var showFrequencyInfo by remember { mutableStateOf(false) }
@@ -191,6 +193,7 @@ private fun SuccessContent(
                 }
                 ResultsMetricsList(
                     metrics = state.metrics,
+                    onTagSave = onUpdateTag,
                     onCoherenceInfoClick = { showCoherenceInfo = true },
                     onFrequencyInfoClick = { showFrequencyInfo = true },
                     onSignalInfoClick = { showQualityInfo = true },

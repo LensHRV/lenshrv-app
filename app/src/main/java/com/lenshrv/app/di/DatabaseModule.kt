@@ -3,6 +3,7 @@ package com.lenshrv.app.di
 import android.content.Context
 import androidx.room.Room
 import com.lenshrv.app.local.AppDatabase
+import com.lenshrv.app.local.MIGRATION_1_2
 import com.lenshrv.app.local.dao.ChannelValuesDao
 import com.lenshrv.app.local.dao.HrvMetricsDao
 import dagger.Module
@@ -25,6 +26,7 @@ object DatabaseModule {
             AppDatabase::class.java,
             dbName,
         )
+            .addMigrations(MIGRATION_1_2)
             .build()
     }
 

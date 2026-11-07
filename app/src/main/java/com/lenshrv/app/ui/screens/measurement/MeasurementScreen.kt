@@ -16,7 +16,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 fun MeasurementScreen(
     viewModel: MeasurementViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit = {},
-    onNavigateToResults: (String) -> Unit = {},
+    onNavigateToResults: (String, String) -> Unit = { _, _ -> },
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -33,13 +33,6 @@ fun MeasurementScreen(
         viewModel.setFlash(state.isFlashEnabled)
     }
 
-    LaunchedEffect(state.phase) {
-        val phase = state.phase
-        if (phase is MeasurementPhase.Finished) {
-            onNavigateToResults(phase.measurementId)
-        }
-    }
-
     LaunchedEffect(Unit) {
         viewModel.prepareCamera(lifecycleOwner)
     }
@@ -47,6 +40,13 @@ fun MeasurementScreen(
     MeasurementContent(
         state = state,
         onNavigateBack = onNavigateBack,
+        onTagChange = viewModel::updateTag,
+        onViewResults = {
+            val phase = state.phase
+            if (phase is MeasurementPhase.Finished) {
+                onNavigateToResults(phase.measurementId, state.tag.trim())
+            }
+        },
     )
 }
 
