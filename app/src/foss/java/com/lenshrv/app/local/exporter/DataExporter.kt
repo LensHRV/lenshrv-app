@@ -9,7 +9,7 @@ import java.util.zip.ZipOutputStream
 object DataExporter {
     fun hrvMetricsToCsv(metrics: List<HrvMetricsEntity>): String {
         val sb = StringBuilder()
-        sb.append("id,timestamp,durationSeconds,bpm,rmssd,sdnn,stressIndex,respirationRate,lf,hf,lfHfRatio,artifactPercent,coveragePercent,coherenceScore,coherencePeakHz,algorithmVersion,cameraMetadata\n")
+        sb.append("id,timestamp,durationSeconds,bpm,rmssd,sdnn,stressIndex,respirationRate,lf,hf,lfHfRatio,artifactPercent,coveragePercent,coherenceScore,coherencePeakHz,algorithmVersion,cameraMetadata,tag\n")
         for (m in metrics) {
             sb.append("${m.id},")
                 .append("${m.timestamp},")
@@ -27,7 +27,8 @@ object DataExporter {
                 .append("${m.coherenceScore},")
                 .append("${m.coherencePeakHz},")
                 .append("${m.algorithmVersion},")
-                .append("\"${m.cameraMetadata}\"\n")
+                .append("${m.cameraMetadata.toCsvCell()},")
+                .append("${m.tag.toCsvCell()}\n")
         }
         return sb.toString()
     }
@@ -61,4 +62,6 @@ object DataExporter {
             zipStream.closeEntry()
         }
     }
+
+    private fun String.toCsvCell(): String = "\"${replace("\"", "\"\"")}\""
 }

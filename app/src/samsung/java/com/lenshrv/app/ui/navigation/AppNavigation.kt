@@ -152,8 +152,8 @@ fun AppNavigation(
             composable<MeasurementRoute> {
                 MeasurementScreen(
                     onNavigateBack = { navController.popBackStack() },
-                    onNavigateToResults = { resultId ->
-                        navController.navigate(ResultsRoute(resultId)) {
+                    onNavigateToResults = { resultId, tag ->
+                        navController.navigate(ResultsRoute(resultId, tag)) {
                             popUpTo(MeasurementRoute) { inclusive = true }
                         }
                     },

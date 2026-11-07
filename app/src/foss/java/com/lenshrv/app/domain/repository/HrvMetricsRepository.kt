@@ -12,6 +12,7 @@ interface HrvMetricsRepository {
     suspend fun getAllChannelValues(): List<ChannelValuesEntity>
     suspend fun save(metrics: HrvMetrics, rawData: List<RawSample>)
     suspend fun getById(id: String): HrvMetrics?
+    suspend fun updateTag(id: String, tag: String)
     fun getRecentSummaries(limit: Int): Flow<List<HrvMetricsSummary>>
     suspend fun delete(id: String)
     suspend fun getMetricsInRange(start: Long, end: Long): List<HrvMetrics>

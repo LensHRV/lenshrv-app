@@ -3,3 +3,17 @@ build/
 .idea/
 .kotlin/
 local.properties
+
+# Packaged application artifacts
+*.apk
+*.aab
+
+# Local credentials and signing material
+.env
+.env.*
+secrets.properties
+credentials.properties
+keystore.properties
+*.jks
+*.keystore
+google-services.json

@@ -1,5 +1,6 @@
 package com.lenshrv.app.local.entities
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -23,5 +24,7 @@ data class HrvMetricsEntity(
     val coherencePeakHz: Double,
     val algorithmVersion: Int = 1,
     val cameraMetadata: String,
+    @ColumnInfo(defaultValue = "''")
+    val tag: String = "",
     val isSynced: Boolean = false,
 )

@@ -17,6 +17,9 @@ interface HrvMetricsDao {
     @Query("SELECT * FROM hrv_metrics WHERE id = :id")
     suspend fun getById(id: String): HrvMetricsEntity?
 
+    @Query("UPDATE hrv_metrics SET tag = :tag WHERE id = :id")
+    suspend fun updateTag(id: String, tag: String)
+
     @Query("SELECT id, timestamp, bpm FROM hrv_metrics ORDER BY timestamp DESC LIMIT :limit")
     fun getRecentSummaries(limit: Int): Flow<List<HrvMetricsSummary>>
 

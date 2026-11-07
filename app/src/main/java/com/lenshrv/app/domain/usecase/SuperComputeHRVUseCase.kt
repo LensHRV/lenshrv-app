@@ -14,6 +14,7 @@ import com.lenshrv.app.domain.algorithm.TimeDomainMetrics
 import com.lenshrv.app.domain.model.Beat
 import com.lenshrv.app.domain.model.HrvMetrics
 import com.lenshrv.app.domain.model.RawSample
+import com.lenshrv.app.domain.model.normalizeMeasurementTag
 import javax.inject.Inject
 import kotlin.math.round
 
@@ -25,6 +26,7 @@ class SuperComputeHRVUseCase @Inject constructor(
         timestamp: Long,
         durationSeconds: Int,
         cameraMetadata: String,
+        tag: String = "",
     ): HrvMetrics? {
         val filtered = ButterworthFilter(rawSamples)
         val at250 = CubicSplineResampler250hz(filtered, targetHz = 250.0)
@@ -71,6 +73,7 @@ class SuperComputeHRVUseCase @Inject constructor(
             coherencePeakHz = lomb.coherencePeakHz,
             algorithmVersion = 1,
             cameraMetadata = cameraMetadata,
+            tag = normalizeMeasurementTag(tag),
         )
     }
 }

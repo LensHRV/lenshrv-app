@@ -46,6 +46,10 @@ class HrvMetricsRepositoryImpl @Inject constructor(
         return hrvMetricsDao.getById(id)?.toDomain()
     }
 
+    override suspend fun updateTag(id: String, tag: String) {
+        hrvMetricsDao.updateTag(id, tag)
+    }
+
     override fun getRecentSummaries(limit: Int): Flow<List<HrvMetricsSummary>> {
         return hrvMetricsDao.getRecentSummaries(limit)
     }
@@ -96,6 +100,7 @@ class HrvMetricsRepositoryImpl @Inject constructor(
             respirationRate = this.respirationRate,
             coherencePeakHz = this.coherencePeakHz,
             cameraMetadata = this.cameraMetadata,
+            tag = this.tag,
         )
     }
 
@@ -118,6 +123,7 @@ class HrvMetricsRepositoryImpl @Inject constructor(
             respirationRate = this.respirationRate,
             coherencePeakHz = this.coherencePeakHz,
             cameraMetadata = this.cameraMetadata,
+            tag = this.tag,
         )
     }
 }
